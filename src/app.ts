@@ -8,7 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import todoRoutes from './routes/todo.routes';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
-import logger from '../utils/logger';
+import logger from './utils/logger'; // Fixed import path
 
 class App {
   public app: Application;
