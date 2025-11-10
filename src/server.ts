@@ -19,12 +19,12 @@ class Server {
 
       // Start server
       const server = this.app.app.listen(this.port, () => {
-        logger.info(`🚀 Server running on port ${this.port}`);
-        logger.info(`📝 Environment: ${process.env.NODE_ENV}`);
-        logger.info(`📍 Health check: http://localhost:${this.port}/health`);
+        logger.info(`Server running on port ${this.port}`);
+        logger.info(`Environment: ${process.env.NODE_ENV}`);
+        logger.info(`Health check: http://localhost:${this.port}/health`);
       });
 
-      // Graceful shutdown
+      // Graceful Shutdown
       this.setupGracefulShutdown(server);
     } catch (error) {
       logger.error('Failed to start server:', error);
@@ -49,7 +49,7 @@ class Server {
           process.exit(0);
         });
 
-        // Force close after 10 seconds
+        // Force Close After 10 Seconds
         setTimeout(() => {
           logger.error('Forced shutdown after timeout');
           process.exit(1);
@@ -57,13 +57,13 @@ class Server {
       });
     });
 
-    // Handle unhandled rejections
+    // Handle Unhandled Rejections
     process.on('unhandledRejection', (reason, promise) => {
       logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
       process.exit(1);
     });
 
-    // Handle uncaught exceptions
+    // Handle Uncaught Exceptions
     process.on('uncaughtException', (error) => {
       logger.error('Uncaught Exception:', error);
       process.exit(1);
@@ -71,6 +71,7 @@ class Server {
   }
 }
 
-// Start the server
+// Start The Server
+// --------------------------->
 const server = new Server();
 server.start();

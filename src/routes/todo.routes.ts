@@ -31,7 +31,7 @@ router.get('/stats', asyncHandler(todoController.getTodoStats));
 
 /**
  * @route GET /api/todos
- * @description Get all todos with filtering, pagination, and sorting
+ * @description Get all todos with filtering, pagination and sorting
  * @access Public
  */
 router.get(

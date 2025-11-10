@@ -11,7 +11,7 @@ export interface ITodo extends Document {
   updatedAt: Date;
 }
 
-// Define the return type for toJSON transform
+// toJSON transform
 interface TodoJSON {
   id: string;
   title: string;
@@ -86,7 +86,6 @@ const todoSchema: Schema = new Schema(
   }
 );
 
-// Index for better query performance
 todoSchema.index({ isCompleted: 1, dueDate: 1 });
 todoSchema.index({ tags: 1 });
 todoSchema.index({ createdAt: -1 });

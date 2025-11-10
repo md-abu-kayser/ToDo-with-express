@@ -8,7 +8,7 @@ import { StatusCodes } from 'http-status-codes';
 
 import todoRoutes from './routes/todo.routes';
 import { errorHandler, notFoundHandler } from './middlewares/error.middleware';
-import logger from './utils/logger'; // Fixed import path
+import logger from './utils/logger';
 
 class App {
   public app: Application;
@@ -21,10 +21,10 @@ class App {
   }
 
   private initializeMiddlewares(): void {
-    // Security headers
+    // Security Headers
     this.app.use(helmet());
 
-    // CORS configuration
+    // CORS Configuration
     this.app.use(
       cors({
         origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
@@ -34,13 +34,13 @@ class App {
       })
     );
 
-    // Response compression
+    // Response Compression
     this.app.use(compression());
 
     // Rate limiting
     const limiter = rateLimit({
-      windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'), // 15 minutes
-      max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'), // Limit each IP to 100 requests per windowMs
+      windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'),
+      max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
       message: {
         success: false,
         message: 'Too many requests from this IP, please try again later',
@@ -50,7 +50,6 @@ class App {
     });
     this.app.use(limiter);
 
-    // Body parsing middleware with limits
     this.app.use(
       express.json({
         limit: '10mb',
@@ -74,7 +73,6 @@ class App {
       })
     );
 
-    // Custom request logging middleware
     this.app.use((req, _res, next) => {
       logger.http('Incoming request', {
         method: req.method,
@@ -86,7 +84,7 @@ class App {
       next();
     });
 
-    // Security middleware - Remove X-Powered-By header
+    // Security middleware
     this.app.disable('x-powered-by');
   }
 
@@ -134,7 +132,7 @@ class App {
     this.app.get('/', (_req, res) => {
       res.status(StatusCodes.OK).json({
         success: true,
-        message: '🚀 Welcome to Production Ready Todo API',
+        message: 'Welcome to Production Ready Todo API',
         description:
           'A world-class RESTful API built with Express.js and TypeScript',
         version: '1.0.0',
@@ -167,7 +165,7 @@ class App {
     this.app.use(errorHandler);
   }
 
-  // Method to get Express app instance (useful for testing)
+  // Method to get Express app
   public getApp(): Application {
     return this.app;
   }

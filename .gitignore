@@ -29,7 +29,7 @@ pids
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
+# Coverage directory used by tools
 coverage/
 .nyc_output/
 
@@ -43,6 +43,6 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# Temporary folders
+# Temporary Folders
 tmp/
 temp/

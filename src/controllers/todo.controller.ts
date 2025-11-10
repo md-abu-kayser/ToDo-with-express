@@ -129,7 +129,6 @@ export class TodoController {
 
   async healthCheck(_req: Request, res: Response): Promise<void> {
     try {
-      // Simple database health check
       await todoService.getAllTodos({ limit: 1 });
 
       res.status(StatusCodes.OK).json({

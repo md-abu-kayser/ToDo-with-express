@@ -45,7 +45,7 @@ export const errorHandler = (
     return;
   }
 
-  // Mongoose cast error (invalid ObjectId)
+  // Mongoose cast error
   if (error.name === 'CastError') {
     res.status(StatusCodes.BAD_REQUEST).json({
       success: false,
