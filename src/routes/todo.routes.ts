@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import { StatusCodes } from 'http-status-codes';
 import todoController from '../controllers/todo.controller';
 import asyncHandler from '../middlewares/asyncHandler';
-import { validate, validateQuery, validateParams } from '../middlewares/validate.middleware';
+import {
+  validate,
+  validateQuery,
+  validateParams,
+} from '../middlewares/validate.middleware';
 import {
   createTodoSchema,
   updateTodoSchema,
   todoQuerySchema,
-  todoIdSchema
+  todoIdSchema,
 } from '../validators/todo.validator';
 
 const router = Router();

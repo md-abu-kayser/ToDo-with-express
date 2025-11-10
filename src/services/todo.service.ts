@@ -46,7 +46,7 @@ export class TodoService {
         page = 1,
         limit = 10,
         sortBy = 'createdAt',
-        sortOrder = 'desc'
+        sortOrder = 'desc',
       } = query;
 
       const filter: any = {};
@@ -66,7 +66,7 @@ export class TodoService {
       if (search) {
         filter.$or = [
           { title: { $regex: search, $options: 'i' } },
-          { description: { $regex: search, $options: 'i' } }
+          { description: { $regex: search, $options: 'i' } },
         ];
       }
 
@@ -74,19 +74,15 @@ export class TodoService {
       const sort: any = { [sortBy]: sortOrder === 'desc' ? -1 : 1 };
 
       const [todos, total] = await Promise.all([
-        Todo.find(filter)
-          .sort(sort)
-          .skip(skip)
-          .limit(limit)
-          .exec(),
-        Todo.countDocuments(filter)
+        Todo.find(filter).sort(sort).skip(skip).limit(limit).exec(),
+        Todo.countDocuments(filter),
       ]);
 
       return {
         todos,
         total,
         page,
-        totalPages: Math.ceil(total / limit)
+        totalPages: Math.ceil(total / limit),
       };
     } catch (error) {
       logger.error('Error fetching todos:', error);
@@ -101,7 +97,7 @@ export class TodoService {
       }
 
       const todo = await Todo.findById(id);
-      
+
       if (!todo) {
         throw new Error('Todo not found');
       }
@@ -117,7 +113,7 @@ export class TodoService {
     try {
       const todo = new Todo(data);
       const savedTodo = await todo.save();
-      
+
       logger.info(`Todo created successfully: ${savedTodo._id}`);
       return savedTodo;
     } catch (error) {
@@ -157,7 +153,7 @@ export class TodoService {
       }
 
       const todo = await Todo.findByIdAndDelete(id);
-      
+
       if (!todo) {
         throw new Error('Todo not found');
       }
@@ -183,10 +179,10 @@ export class TodoService {
           {
             $group: {
               _id: '$priority',
-              count: { $sum: 1 }
-            }
-          }
-        ])
+              count: { $sum: 1 },
+            },
+          },
+        ]),
       ]);
 
       const priorityStats = { low: 0, medium: 0, high: 0 };
@@ -198,7 +194,7 @@ export class TodoService {
         total,
         completed,
         pending: total - completed,
-        byPriority: priorityStats
+        byPriority: priorityStats,
       };
     } catch (error) {
       logger.error('Error fetching todo stats:', error);

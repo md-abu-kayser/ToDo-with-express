@@ -1,5 +1,4 @@
 import express, { Application } from 'express';
-import 'express-async-errors';
 import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
@@ -26,10 +25,12 @@ class App {
     this.app.use(helmet());
 
     // CORS
-    this.app.use(cors({
-      origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-      credentials: true
-    }));
+    this.app.use(
+      cors({
+        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+        credentials: true,
+      })
+    );
 
     // Compression
     this.app.use(compression());
@@ -40,10 +41,10 @@ class App {
       max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'), // Limit each IP to 100 requests per windowMs
       message: {
         success: false,
-        message: 'Too many requests from this IP, please try again later'
+        message: 'Too many requests from this IP, please try again later',
       },
       standardHeaders: true,
-      legacyHeaders: false
+      legacyHeaders: false,
     });
     this.app.use(limiter);
 
@@ -52,9 +53,11 @@ class App {
     this.app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
     // Logging
-    this.app.use(morgan('combined', {
-      stream: { write: (message) => logger.info(message.trim()) }
-    }));
+    this.app.use(
+      morgan('combined', {
+        stream: { write: (message) => logger.info(message.trim()) },
+      })
+    );
 
     // Request logging middleware
     this.app.use((req, res, next) => {
@@ -62,7 +65,7 @@ class App {
         method: req.method,
         url: req.url,
         ip: req.ip,
-        userAgent: req.get('User-Agent')
+        userAgent: req.get('User-Agent'),
       });
       next();
     });
@@ -76,7 +79,7 @@ class App {
         message: 'Server is running',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        environment: process.env.NODE_ENV
+        environment: process.env.NODE_ENV,
       });
     });
 
@@ -89,7 +92,7 @@ class App {
         success: true,
         message: 'Welcome to Todo API',
         version: '1.0.0',
-        documentation: '/api/docs' // You can add Swagger documentation here
+        documentation: '/api/docs',
       });
     });
   }

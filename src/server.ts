@@ -35,16 +35,16 @@ class Server {
   private setupGracefulShutdown(server: any): void {
     const signals = ['SIGTERM', 'SIGINT'];
 
-    signals.forEach(signal => {
+    signals.forEach((signal) => {
       process.on(signal, async () => {
         logger.info(`Received ${signal}, starting graceful shutdown...`);
-        
+
         server.close((err: any) => {
           if (err) {
             logger.error('Error during server close:', err);
             process.exit(1);
           }
-          
+
           logger.info('Server closed successfully');
           process.exit(0);
         });

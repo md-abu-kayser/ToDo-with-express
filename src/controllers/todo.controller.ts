@@ -15,10 +15,10 @@ export class TodoController {
         data: result.todos,
         pagination: {
           page: result.page,
-          limit: result.limit,
+          limit: Number(query.limit) || 10, // Fixed: Use query limit
           total: result.total,
-          totalPages: result.totalPages
-        }
+          totalPages: result.totalPages,
+        },
       });
     } catch (error) {
       logger.error('Error in getAllTodos controller:', error);
@@ -29,12 +29,20 @@ export class TodoController {
   async getTodoById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+      if (!id) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+          success: false,
+          message: 'Todo ID is required',
+        });
+        return;
+      }
+
       const todo = await todoService.getTodoById(id);
 
       res.status(StatusCodes.OK).json({
         success: true,
         message: 'Todo fetched successfully',
-        data: todo
+        data: todo,
       });
     } catch (error) {
       logger.error('Error in getTodoById controller:', error);
@@ -49,7 +57,7 @@ export class TodoController {
       res.status(StatusCodes.CREATED).json({
         success: true,
         message: 'Todo created successfully',
-        data: todo
+        data: todo,
       });
     } catch (error) {
       logger.error('Error in createTodo controller:', error);
@@ -60,12 +68,20 @@ export class TodoController {
   async updateTodo(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+      if (!id) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+          success: false,
+          message: 'Todo ID is required',
+        });
+        return;
+      }
+
       const todo = await todoService.updateTodo(id, req.body);
 
       res.status(StatusCodes.OK).json({
         success: true,
         message: 'Todo updated successfully',
-        data: todo
+        data: todo,
       });
     } catch (error) {
       logger.error('Error in updateTodo controller:', error);
@@ -76,11 +92,19 @@ export class TodoController {
   async deleteTodo(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+      if (!id) {
+        res.status(StatusCodes.BAD_REQUEST).json({
+          success: false,
+          message: 'Todo ID is required',
+        });
+        return;
+      }
+
       await todoService.deleteTodo(id);
 
       res.status(StatusCodes.OK).json({
         success: true,
-        message: 'Todo deleted successfully'
+        message: 'Todo deleted successfully',
       });
     } catch (error) {
       logger.error('Error in deleteTodo controller:', error);
@@ -95,7 +119,7 @@ export class TodoController {
       res.status(StatusCodes.OK).json({
         success: true,
         message: 'Todo statistics fetched successfully',
-        data: stats
+        data: stats,
       });
     } catch (error) {
       logger.error('Error in getTodoStats controller:', error);
@@ -113,14 +137,14 @@ export class TodoController {
         message: 'Service is healthy',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
-        environment: process.env.NODE_ENV
+        environment: process.env.NODE_ENV,
       });
     } catch (error) {
       logger.error('Health check failed:', error);
       res.status(StatusCodes.SERVICE_UNAVAILABLE).json({
         success: false,
         message: 'Service is unhealthy',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   }

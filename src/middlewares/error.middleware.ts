@@ -18,20 +18,20 @@ export const errorHandler = (
     stack: error.stack,
     path: req.path,
     method: req.method,
-    ip: req.ip
+    ip: req.ip,
   });
 
   // Mongoose validation error
   if (error.name === 'ValidationError') {
     const errors = Object.values((error as any).errors).map((err: any) => ({
       field: err.path,
-      message: err.message
+      message: err.message,
     }));
 
     res.status(StatusCodes.BAD_REQUEST).json({
       success: false,
       message: 'Validation failed',
-      errors
+      errors,
     });
     return;
   }
@@ -40,7 +40,7 @@ export const errorHandler = (
   if (error.name === 'MongoServerError' && (error as any).code === 11000) {
     res.status(StatusCodes.CONFLICT).json({
       success: false,
-      message: 'Duplicate field value entered'
+      message: 'Duplicate field value entered',
     });
     return;
   }
@@ -49,7 +49,7 @@ export const errorHandler = (
   if (error.name === 'CastError') {
     res.status(StatusCodes.BAD_REQUEST).json({
       success: false,
-      message: 'Invalid resource ID'
+      message: 'Invalid resource ID',
     });
     return;
   }
@@ -60,13 +60,13 @@ export const errorHandler = (
   res.status(statusCode).json({
     success: false,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+    ...(process.env.NODE_ENV === 'development' && { stack: error.stack }),
   });
 };
 
 export const notFoundHandler = (req: Request, res: Response): void => {
   res.status(StatusCodes.NOT_FOUND).json({
     success: false,
-    message: `Route ${req.originalUrl} not found`
+    message: `Route ${req.originalUrl} not found`,
   });
 };
